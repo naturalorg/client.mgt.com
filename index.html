@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvoicePrime — Client Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05060f;
+            --surface: #0c0e1e;
+            --surface2: #12152a;
+            --border: rgba(255,255,255,0.07);
+            --accent: #6366F1;
+            --accent2: #818CF8;
+            --gold: #FCD34D;
+            --gold-dim: rgba(252,211,77,0.12);
+            --text: #F1F0FF;
+            --text-muted: rgba(241,240,255,0.45);
+            --text-dim: rgba(241,240,255,0.22);
+            --card-glow: rgba(99,102,241,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; }
+        .orb-1 { width: 560px; height: 560px; background: radial-gradient(circle, rgba(67,56,202,0.2) 0%, transparent 70%); top: -180px; left: -120px; animation: d1 14s ease-in-out infinite alternate; }
+        .orb-2 { width: 420px; height: 420px; background: radial-gradient(circle, rgba(139,92,246,0.13) 0%, transparent 70%); bottom: -120px; right: -100px; animation: d2 18s ease-in-out infinite alternate; }
+        .orb-3 { width: 320px; height: 320px; background: radial-gradient(circle, rgba(252,211,77,0.07) 0%, transparent 70%); top: 40%; left: 55%; animation: d3 20s ease-in-out infinite alternate; }
+        @keyframes d1 { 0%{transform:translate(0,0)} 100%{transform:translate(50px,40px)} }
+        @keyframes d2 { 0%{transform:translate(0,0)} 100%{transform:translate(-40px,-30px)} }
+        @keyframes d3 { 0%{transform:translate(-50%,-50%) scale(1)} 100%{transform:translate(calc(-50% + 40px),calc(-50% + 30px)) scale(1.12)} }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            position: sticky; top: 0; z-index: 200;
+            height: 72px; padding: 0 3rem;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(5,6,15,0.85);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-logo-svg { width: 40px; height: 40px; filter: drop-shadow(0 4px 16px rgba(99,102,241,0.5)); }
+        .nav-brand { display: flex; flex-direction: column; }
+        .nav-brand-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--text); line-height: 1.1; }
+        .nav-brand-sub { font-size: 0.62rem; font-weight: 500; color: var(--text-muted); letter-spacing: 2.5px; text-transform: uppercase; }
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .count-pill { padding: 5px 14px; background: var(--gold-dim); border: 1px solid rgba(252,211,77,0.2); border-radius: 100px; font-size: 0.74rem; font-weight: 600; color: var(--gold); }
+        .btn-admin {
+            display: flex; align-items: center; gap: 8px;
+            padding: 9px 18px;
+            background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.28);
+            border-radius: 10px; color: var(--text);
+            font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500;
+            cursor: pointer; transition: all 0.25s;
+        }
+        .btn-admin:hover { background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.5); box-shadow: 0 0 20px rgba(99,102,241,0.2); }
+        .btn-admin.admin-on { background: var(--gold-dim); border-color: rgba(252,211,77,0.35); color: var(--gold); }
+
+        /* ── HERO ── */
+        .hero { position: relative; z-index: 1; padding: 80px 3rem 50px; text-align: center; }
+        .hero-eyebrow {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 5px 16px;
+            background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.22);
+            border-radius: 100px; font-size: 0.74rem; font-weight: 600;
+            color: var(--accent2); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 26px;
+        }
+        .hero-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); animation: blink 2s ease-in-out infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+        .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 5vw, 4.2rem); font-weight: 900; line-height: 1.08; letter-spacing: -2px; color: var(--text); margin-bottom: 18px; }
+        .hero-title span { background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-desc { font-size: 1.05rem; color: var(--text-muted); font-weight: 300; max-width: 480px; margin: 0 auto 54px; line-height: 1.65; }
+
+        .stats-row { display: flex; justify-content: center; margin-bottom: 56px; position: relative; z-index: 1; }
+        .stat { padding: 18px 40px; text-align: center; border-right: 1px solid var(--border); }
+        .stat:last-child { border-right: none; }
+        .stat-n { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 700; color: var(--text); display: block; }
+        .stat-l { font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
+
+        /* ── SECTION ── */
+        .section { position: relative; z-index: 1; padding: 0 3rem 80px; max-width: 1400px; margin: 0 auto; }
+        .section-head { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; }
+        .section-tag { font-size: 0.73rem; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+        .section-line { height: 1px; flex: 1; background: linear-gradient(90deg, var(--border), transparent); }
+
+        /* ── CLIENT CARDS ── */
+        .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1.5rem; }
+        .client-card {
+            position: relative;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 20px; padding: 26px;
+            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+            overflow: hidden;
+            animation: cardIn 0.5s ease both;
+        }
+        @keyframes cardIn { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+        .client-card:nth-child(1){animation-delay:.05s} .client-card:nth-child(2){animation-delay:.1s}
+        .client-card:nth-child(3){animation-delay:.15s} .client-card:nth-child(4){animation-delay:.2s}
+        .client-card:nth-child(5){animation-delay:.25s} .client-card:nth-child(6){animation-delay:.3s}
+        .client-card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#4338ca,#6366f1,#fcd34d); opacity:0; transition:opacity 0.3s; }
+        .client-card:hover { transform:translateY(-6px); border-color:rgba(99,102,241,0.28); box-shadow:0 20px 55px rgba(0,0,0,0.45),0 0 35px var(--card-glow); }
+        .client-card:hover::after { opacity:1; }
+
+        .card-logo-row { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px; }
+        .card-logo-box {
+            width:60px; height:60px;
+            background:linear-gradient(135deg,rgba(67,56,202,0.12),rgba(99,102,241,0.08));
+            border:1px solid rgba(99,102,241,0.18); border-radius:14px;
+            display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden;
+        }
+        .card-logo-box svg { width:38px; height:38px; }
+
+        .badge-premium { padding:4px 10px; background:var(--gold-dim); border:1px solid rgba(252,211,77,0.2); border-radius:100px; font-size:0.68rem; font-weight:600; color:var(--gold); text-transform:uppercase; letter-spacing:0.5px; }
+        .card-name { font-family:'Playfair Display',serif; font-size:1.25rem; font-weight:700; color:var(--text); margin-bottom:5px; line-height:1.2; }
+        .card-since { font-size:0.78rem; color:var(--text-dim); }
+        .card-divider { height:1px; background:var(--border); margin:18px 0; }
+        .card-tags { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:18px; }
+        .ctag { display:flex; align-items:center; gap:5px; padding:4px 9px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:6px; font-size:0.7rem; color:var(--text-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
+        .card-actions { display:grid; grid-template-columns:1fr auto; gap:9px; }
+        .btn-login { display:flex; align-items:center; justify-content:center; gap:7px; padding:11px; border:none; border-radius:11px; background:linear-gradient(135deg,#4338ca 0%,#6366f1 100%); color:white; font-family:'DM Sans',sans-serif; font-size:0.88rem; font-weight:600; cursor:pointer; transition:all 0.25s; position:relative; overflow:hidden; }
+        .btn-login::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.14) 0%,transparent 60%); }
+        .btn-login:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(99,102,241,0.45); }
+        .btn-contact { display:flex; align-items:center; justify-content:center; padding:11px 14px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:11px; color:var(--text-muted); cursor:pointer; transition:all 0.25s; }
+        .btn-contact:hover { background:var(--gold-dim); border-color:rgba(252,211,77,0.3); color:var(--gold); }
+
+        /* ── EMPTY STATE ── */
+        .empty-state { grid-column:1/-1; text-align:center; padding:80px 20px; }
+        .empty-icon-wrap { width:88px; height:88px; background:var(--surface); border:1px solid var(--border); border-radius:22px; display:flex; align-items:center; justify-content:center; margin:0 auto 22px; color:var(--text-dim); }
+        .empty-title { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--text-muted); margin-bottom:8px; }
+        .empty-desc { font-size:0.92rem; color:var(--text-dim); }
+
+        /* ── OVERLAY ── */
+        .overlay { position:fixed; inset:0; background:rgba(5,6,15,0.88); backdrop-filter:blur(22px); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; }
+        .overlay.active { display:flex; animation:fadeIn 0.2s ease; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+        /* ── LOGIN MODAL ── */
+        .login-modal { background:var(--surface); border:1px solid rgba(99,102,241,0.18); border-radius:24px; padding:44px; max-width:420px; width:100%; position:relative; animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 40px 100px rgba(0,0,0,0.7),0 0 60px rgba(99,102,241,0.1); }
+        @keyframes popIn { from{opacity:0;transform:scale(0.92) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }
+        .close-x { position:absolute; top:16px; right:16px; width:32px; height:32px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; transition:all 0.2s; }
+        .close-x:hover { background:rgba(255,255,255,0.08); color:var(--text); }
+        .login-head { text-align:center; margin-bottom:32px; }
+        .login-logo-ring { width:70px; height:70px; margin:0 auto 16px; background:linear-gradient(135deg,rgba(67,56,202,0.15),rgba(99,102,241,0.1)); border:1px solid rgba(99,102,241,0.22); border-radius:20px; display:flex; align-items:center; justify-content:center; }
+        .login-logo-ring svg { width:44px; height:44px; filter:drop-shadow(0 2px 10px rgba(99,102,241,0.4)); }
+        .login-title { font-family:'Playfair Display',serif; font-size:1.65rem; font-weight:700; color:var(--text); margin-bottom:5px; }
+        .login-sub { font-size:0.88rem; color:var(--text-muted); }
+        .fld { margin-bottom:16px; }
+        .fld-label { display:block; font-size:0.78rem; font-weight:600; color:var(--text-muted); margin-bottom:7px; text-transform:uppercase; letter-spacing:0.5px; }
+        .fld-wrap { position:relative; }
+        .fld-ico { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--text-dim); pointer-events:none; }
+        .fld-input { width:100%; padding:12px 13px 12px 40px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:11px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.93rem; transition:all 0.22s; outline:none; }
+        .fld-input:focus { border-color:rgba(99,102,241,0.45); background:rgba(99,102,241,0.05); box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+        .fld-input::placeholder { color:var(--text-dim); }
+        .eye-btn { position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-dim); cursor:pointer; padding:4px; transition:color 0.2s; }
+        .eye-btn:hover { color:var(--text-muted); }
+        .err-box { padding:11px 14px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:10px; color:#FCA5A5; font-size:0.85rem; margin-bottom:14px; display:none; }
+        .err-box.show { display:block; }
+        .btn-primary { width:100%; padding:13px; border:none; border-radius:11px; background:linear-gradient(135deg,#4338ca 0%,#6366f1 100%); color:white; font-family:'DM Sans',sans-serif; font-size:0.97rem; font-weight:600; cursor:pointer; transition:all 0.25s; margin-top:6px; position:relative; overflow:hidden; }
+        .btn-primary::before { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(255,255,255,0.12),transparent); }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(99,102,241,0.5); }
+
+        /* ── ADMIN MODAL ── */
+        .admin-modal { background:var(--surface); border:1px solid rgba(99,102,241,0.18); border-radius:24px; max-width:1080px; width:100%; max-height:88vh; display:flex; flex-direction:column; position:relative; animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 40px 100px rgba(0,0,0,0.7),0 0 60px rgba(99,102,241,0.08); overflow:hidden; }
+        .admin-topbar { padding:22px 28px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--surface2); flex-shrink:0; }
+        .admin-tb-left { display:flex; align-items:center; gap:12px; }
+        .admin-topbar-logo svg { width:30px; height:30px; filter:drop-shadow(0 2px 10px rgba(99,102,241,0.4)); }
+        .admin-title { font-family:'Playfair Display',serif; font-size:1.45rem; font-weight:700; color:var(--text); }
+        .admin-count-badge { padding:4px 12px; background:rgba(99,102,241,0.12); border:1px solid rgba(99,102,241,0.22); border-radius:100px; font-size:0.75rem; font-weight:600; color:var(--accent2); }
+        .admin-tb-right { display:flex; align-items:center; gap:9px; }
+        .btn-add { display:flex; align-items:center; gap:7px; padding:9px 18px; background:linear-gradient(135deg,#4338ca,#6366f1); border:none; border-radius:10px; color:white; font-family:'DM Sans',sans-serif; font-size:0.86rem; font-weight:600; cursor:pointer; transition:all 0.25s; }
+        .btn-add:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(99,102,241,0.45); }
+        .btn-logout { padding:9px 16px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:10px; color:#FCA5A5; font-family:'DM Sans',sans-serif; font-size:0.86rem; font-weight:500; cursor:pointer; transition:all 0.25s; }
+        .btn-logout:hover { background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.35); }
+
+        .admin-form-wrap { padding:20px 28px; border-bottom:1px solid var(--border); background:rgba(99,102,241,0.03); flex-shrink:0; display:none; }
+        .admin-form-wrap.open { display:block; }
+        .form-title { font-weight:600; font-size:0.88rem; color:var(--accent2); margin-bottom:14px; text-transform:uppercase; letter-spacing:0.5px; }
+        .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:13px; }
+        .form-full { grid-column:1/-1; }
+        .admin-label { display:block; font-size:0.74rem; font-weight:600; color:var(--text-muted); margin-bottom:5px; text-transform:uppercase; letter-spacing:0.4px; }
+        .admin-inp { width:100%; padding:10px 13px; background:var(--surface); border:1px solid var(--border); border-radius:9px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none; transition:all 0.22s; }
+        .admin-inp:focus { border-color:rgba(99,102,241,0.45); background:rgba(99,102,241,0.04); box-shadow:0 0 0 3px rgba(99,102,241,0.08); }
+        .admin-inp::placeholder { color:var(--text-dim); }
+        .form-btns { display:flex; gap:9px; justify-content:flex-end; }
+        .btn-save { padding:9px 22px; background:linear-gradient(135deg,#4338ca,#6366f1); border:none; border-radius:9px; color:white; font-family:'DM Sans',sans-serif; font-size:0.88rem; font-weight:600; cursor:pointer; transition:all 0.22s; }
+        .btn-save:hover { transform:translateY(-1px); box-shadow:0 5px 18px rgba(99,102,241,0.4); }
+        .btn-cancel2 { padding:9px 18px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:9px; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:0.88rem; cursor:pointer; transition:all 0.2s; }
+        .btn-cancel2:hover { background:rgba(255,255,255,0.07); }
+
+        .admin-body { overflow-y:auto; padding:20px 28px; flex:1; }
+        .admin-body::-webkit-scrollbar { width:5px; }
+        .admin-body::-webkit-scrollbar-track { background:transparent; }
+        .admin-body::-webkit-scrollbar-thumb { background:rgba(99,102,241,0.2); border-radius:3px; }
+
+        .admin-row { display:flex; align-items:center; gap:14px; padding:14px 16px; background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:13px; margin-bottom:9px; transition:all 0.22s; }
+        .admin-row:hover { background:rgba(99,102,241,0.05); border-color:rgba(99,102,241,0.18); }
+        .admin-logo-sm { width:42px; height:42px; background:linear-gradient(135deg,rgba(67,56,202,0.12),rgba(99,102,241,0.08)); border:1px solid rgba(99,102,241,0.18); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; }
+        .admin-logo-sm svg { width:26px; height:26px; }
+        .admin-row-info { flex:1; min-width:0; }
+        .admin-row-name { font-weight:600; font-size:0.95rem; color:var(--text); margin-bottom:4px; }
+        .admin-row-meta { display:flex; flex-wrap:wrap; gap:12px; font-size:0.77rem; color:var(--text-muted); }
+        .admin-meta-item { display:flex; align-items:center; gap:4px; }
+        .admin-row-actions { display:flex; gap:7px; flex-shrink:0; }
+        .icon-btn { width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px; color:var(--text-muted); cursor:pointer; transition:all 0.2s; }
+        .icon-btn:hover { background:rgba(99,102,241,0.12); border-color:rgba(99,102,241,0.3); color:var(--accent2); }
+        .icon-btn.del:hover { background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.25); color:#FCA5A5; }
+        .admin-empty { text-align:center; padding:60px 20px; color:var(--text-dim); }
+        .admin-empty svg { margin:0 auto 14px; display:block; opacity:0.4; }
+
+        /* ── FOOTER ── */
+        .footer { position:relative; z-index:1; padding:24px 3rem; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+        .footer-left { display:flex; align-items:center; gap:10px; }
+        .footer-left svg { width:26px; height:26px; filter:drop-shadow(0 2px 8px rgba(99,102,241,0.35)); }
+        .footer-brand { font-family:'Playfair Display',serif; font-size:0.88rem; color:var(--text-muted); }
+        .footer-note { font-size:0.78rem; color:var(--text-dim); }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:768px){
+            .navbar{padding:0 1.5rem} .hero{padding:50px 1.5rem 36px} .section{padding:0 1.5rem 60px}
+            .stats-row{display:none} .clients-grid{grid-template-columns:1fr} .form-grid{grid-template-columns:1fr}
+            .admin-topbar{flex-direction:column;gap:14px;align-items:flex-start} .admin-tb-right{width:100%}
+            .admin-row{flex-direction:column;align-items:flex-start;gap:10px} .footer{flex-direction:column;gap:8px;text-align:center}
+        }
+        @media(max-width:480px){ .hero-title{font-size:2.2rem} .login-modal{padding:28px 22px} }
+        .hidden{display:none!important}
+    </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- InvoicePrime SVG logo symbol (reused everywhere) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="ip-logo" viewBox="0 0 512 512">
+        <defs>
+            <linearGradient id="sg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4338CA"/>
+                <stop offset="100%" stop-color="#6366F1"/>
+            </linearGradient>
+            <linearGradient id="sh" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+            <filter id="sdw" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="12" stdDeviation="24" flood-color="#1E1B4B" flood-opacity="0.55"/>
+            </filter>
+            <filter id="sglow">
+                <feGaussianBlur stdDeviation="6" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+        </defs>
+        <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#sg)" filter="url(#sdw)"/>
+        <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#sh)"/>
+        <rect x="174" y="168" width="164" height="23" rx="11.5" fill="white" fill-opacity="0.95"/>
+        <rect x="174" y="212" width="128" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
+        <rect x="174" y="256" width="146" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
+        <g filter="url(#sglow)">
+            <path d="M256 316 L270 338 L295 330 L282 352 L298 372 L273 370 L256 392 L239 370 L214 372 L230 352 L217 330 L242 338 Z" fill="#FCD34D" fill-opacity="0.97"/>
+        </g>
+    </symbol>
+</svg>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar">
+    <a class="nav-logo" href="#">
+        <svg class="nav-logo-svg" viewBox="0 0 512 512"><use href="#ip-logo"/></svg>
+        <div class="nav-brand">
+            <span class="nav-brand-name">InvoicePrime</span>
+            <span class="nav-brand-sub">Client Portal</span>
+        </div>
+    </a>
+    <div class="nav-right">
+        <span class="count-pill" id="navCount">0 Clients</span>
+        <button class="btn-admin" id="adminBtn" onclick="handleAdmin()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span id="adminBtnTxt">Admin Access</span>
+        </button>
+    </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+    <div class="hero-eyebrow"><div class="hero-dot"></div>Secure Portal</div>
+    <h1 class="hero-title">Manage <span>Our Clients</span><br>Professionally</h1>
+    <p class="hero-desc">A centralised portal to manage all client accounts, login access, and contact details — all in one place.</p>
+</section>
+
+<div class="stats-row">
+    <div class="stat"><span class="stat-n" id="statN">0</span><span class="stat-l">Active Clients</span></div>
+    <div class="stat"><span class="stat-n">100%</span><span class="stat-l">Uptime</span></div>
+    <div class="stat"><span class="stat-n">SSL</span><span class="stat-l">Secured</span></div>
+</div>
+
+<!-- ══ CLIENTS ══ -->
+<main class="section">
+    <div class="section-head">
+        <span class="section-tag">Our Clients</span>
+        <div class="section-line"></div>
+    </div>
+    <div class="clients-grid" id="clientsGrid"></div>
+    <div class="empty-state hidden" id="emptyState">
+        <div class="empty-icon-wrap">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+        </div>
+        <h3 class="empty-title">No clients yet</h3>
+        <p class="empty-desc">Admin can add clients from the Admin Panel</p>
+    </div>
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+    <div class="footer-left">
+        <svg viewBox="0 0 512 512"><use href="#ip-logo"/></svg>
+        <span class="footer-brand">InvoicePrime — Client Portal</span>
+    </div>
+    <span class="footer-note">All data stored securely in your browser</span>
+</footer>
+
+<!-- ══ LOGIN OVERLAY ══ -->
+<div class="overlay" id="loginOverlay" onclick="overlayClick(event,'loginOverlay')">
+    <div class="login-modal">
+        <button class="close-x" onclick="closeLogin()">×</button>
+        <div class="login-head">
+            <div class="login-logo-ring">
+                <svg viewBox="0 0 512 512"><use href="#ip-logo"/></svg>
+            </div>
+            <h2 class="login-title">Admin Access</h2>
+            <p class="login-sub">Sign in to manage your client portal</p>
+        </div>
+        <div class="fld">
+            <label class="fld-label">Email Address</label>
+            <div class="fld-wrap">
+                <span class="fld-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                <input type="email" class="fld-input" id="loginEmail" placeholder="admin@company.com"/>
+            </div>
+        </div>
+        <div class="fld">
+            <label class="fld-label">Password</label>
+            <div class="fld-wrap">
+                <span class="fld-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                <input type="password" class="fld-input" id="loginPwd" placeholder="••••••••"/>
+                <button class="eye-btn" onclick="togglePwd()" type="button">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eyeIco">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="err-box" id="loginErr">Invalid credentials. Please try again.</div>
+        <button class="btn-primary" onclick="doLogin()">Sign In Securely</button>
+    </div>
+</div>
+
+<!-- ══ ADMIN OVERLAY ══ -->
+<div class="overlay" id="adminOverlay" onclick="overlayClick(event,'adminOverlay')">
+    <div class="admin-modal">
+        <button class="close-x" style="position:absolute;top:14px;right:14px;z-index:10" onclick="closeAdmin()">×</button>
+
+        <div class="admin-topbar">
+            <div class="admin-tb-left">
+                <div class="admin-topbar-logo">
+                    <svg viewBox="0 0 512 512"><use href="#ip-logo"/></svg>
+                </div>
+                <h2 class="admin-title">Client Management</h2>
+                <span class="admin-count-badge" id="adminBadge">0 Clients</span>
+            </div>
+            <div class="admin-tb-right">
+                <button class="btn-add" onclick="openAddForm()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add New Client
+                </button>
+                <button class="btn-logout" onclick="doLogout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Add / Edit Form -->
+        <div class="admin-form-wrap" id="formWrap">
+            <div class="form-title" id="formTitle">Add New Client</div>
+            <input type="hidden" id="editId"/>
+            <div class="form-grid">
+                <div>
+                    <label class="admin-label">Client Name *</label>
+                    <input type="text" class="admin-inp" id="fName" placeholder="Acme Corporation"/>
+                </div>
+                <div>
+                    <label class="admin-label">Email</label>
+                    <input type="email" class="admin-inp" id="fEmail" placeholder="contact@acme.com"/>
+                </div>
+                <div>
+                    <label class="admin-label">Phone</label>
+                    <input type="tel" class="admin-inp" id="fPhone" placeholder="+91 99999 00000"/>
+                </div>
+                <div>
+                    <label class="admin-label">Login URL *</label>
+                    <input type="url" class="admin-inp" id="fLogin" placeholder="https://portal.acme.com"/>
+                </div>
+                <div class="form-full">
+                    <label class="admin-label">Contact URL (optional)</label>
+                    <input type="url" class="admin-inp" id="fContact" placeholder="https://support.acme.com"/>
+                </div>
+            </div>
+            <div class="form-btns">
+                <button class="btn-cancel2" onclick="closeForm()">Cancel</button>
+                <button class="btn-save" id="formSaveBtn" onclick="saveClient()">Add Client</button>
+            </div>
+        </div>
+
+        <div class="admin-body" id="adminBody"></div>
+    </div>
+</div>
+
+<script>
+    const ADMIN_EMAIL    = 'Adithya@business.com';
+    const ADMIN_PASSWORD = 'Business@2026';
+    const KEY            = 'invoiceprime_clients';
+
+    let clients  = [];
+    let isAdmin  = false;
+    let editMode = false;
+
+    // Inline logo SVG for dynamic injection (card & admin list)
+    const LOGO_HTML = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+        <defs>
+            <linearGradient id="lg1" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4338CA"/><stop offset="100%" stop-color="#6366F1"/>
+            </linearGradient>
+            <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+            <filter id="lf1" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1E1B4B" flood-opacity="0.5"/>
+            </filter>
+            <filter id="lf2">
+                <feGaussianBlur stdDeviation="3" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+        </defs>
+        <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#lg1)" filter="url(#lf1)"/>
+        <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#lg2)"/>
+        <rect x="174" y="168" width="164" height="23" rx="11.5" fill="white" fill-opacity="0.95"/>
+        <rect x="174" y="212" width="128" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
+        <rect x="174" y="256" width="146" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
+        <g filter="url(#lf2)">
+            <path d="M256 316 L270 338 L295 330 L282 352 L298 372 L273 370 L256 392 L239 370 L214 372 L230 352 L217 330 L242 338 Z" fill="#FCD34D" fill-opacity="0.97"/>
+        </g>
+    </svg>`;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        try { clients = JSON.parse(localStorage.getItem(KEY)) || []; } catch(e){ clients=[]; }
+        render();
+        document.getElementById('loginPwd').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+        document.getElementById('loginEmail').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+    });
+
+    function save() { localStorage.setItem(KEY, JSON.stringify(clients)); }
+
+    function render() { renderPublic(); renderAdminList(); updateCounts(); }
+
+    function renderPublic() {
+        const grid  = document.getElementById('clientsGrid');
+        const empty = document.getElementById('emptyState');
+        if (!clients.length) { grid.innerHTML=''; empty.classList.remove('hidden'); return; }
+        empty.classList.add('hidden');
+
+        grid.innerHTML = clients.map((c,i) => {
+            const date = c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-IN',{year:'numeric',month:'short'}) : '';
+            const tags = [];
+            if (c.email) tags.push(`<span class="ctag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</span>`);
+            if (c.phone) tags.push(`<span class="ctag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${esc(c.phone)}</span>`);
+            return `
+            <div class="client-card" style="animation-delay:${i*0.06}s">
+                <div class="card-logo-row">
+                    <div class="card-logo-box">${LOGO_HTML}</div>
+                    <span class="badge-premium">Premium</span>
+                </div>
+                <div class="card-name">${esc(c.name)}</div>
+                ${date?`<div class="card-since">Client since ${date}</div>`:''}
+                <div class="card-divider"></div>
+                ${tags.length?`<div class="card-tags">${tags.join('')}</div>`:''}
+                <div class="card-actions">
+                    <button class="btn-login" onclick="goLogin('${escA(c.loginUrl)}')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                        Client Login
+                    </button>
+                    <button class="btn-contact" onclick="goContact('${esc(c.id)}')" title="Contact">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function renderAdminList() {
+        const body = document.getElementById('adminBody');
+        if (!body) return;
+        if (!clients.length) {
+            body.innerHTML=`<div class="admin-empty"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><p>No clients yet. Click <strong>Add New Client</strong> to start.</p></div>`;
+            return;
+        }
+        body.innerHTML = clients.map(c=>`
+            <div class="admin-row">
+                <div class="admin-logo-sm">${LOGO_HTML}</div>
+                <div class="admin-row-info">
+                    <div class="admin-row-name">${esc(c.name)}</div>
+                    <div class="admin-row-meta">
+                        ${c.email?`<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</span>`:''}
+                        ${c.phone?`<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${esc(c.phone)}</span>`:''}
+                        <span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>${esc(c.loginUrl)}</span>
+                    </div>
+                </div>
+                <div class="admin-row-actions">
+                    <button class="icon-btn" onclick="openEditForm('${esc(c.id)}')" title="Edit Client">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </button>
+                    <button class="icon-btn" onclick="window.open('${escA(c.loginUrl)}','_blank')" title="Open Portal">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </button>
+                    <button class="icon-btn del" onclick="deleteClient('${esc(c.id)}')" title="Delete">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    </button>
+                </div>
+            </div>`).join('');
+    }
+
+    function updateCounts() {
+        const n = clients.length, l = `${n} Client${n!==1?'s':''}`;
+        document.getElementById('navCount').textContent = l;
+        document.getElementById('adminBadge').textContent = l;
+        document.getElementById('statN').textContent = n;
+    }
+
+    function goLogin(url) { if(url) window.open(url,'_blank','noopener,noreferrer'); }
+    function goContact(id) {
+        const c=clients.find(x=>x.id===id); if(!c) return;
+        if(c.contactUrl) window.open(c.contactUrl,'_blank','noopener,noreferrer');
+        else if(c.email) window.location.href=`mailto:${c.email}`;
+    }
+
+    function handleAdmin() {
+        if(isAdmin){ document.getElementById('adminOverlay').classList.add('active'); renderAdminList(); }
+        else { document.getElementById('loginOverlay').classList.add('active'); setTimeout(()=>document.getElementById('loginEmail').focus(),80); }
+    }
+
+    function doLogin() {
+        const email=document.getElementById('loginEmail').value.trim(), pwd=document.getElementById('loginPwd').value;
+        const err=document.getElementById('loginErr');
+        if(email===ADMIN_EMAIL && pwd===ADMIN_PASSWORD){
+            isAdmin=true; closeLogin();
+            document.getElementById('adminOverlay').classList.add('active');
+            document.getElementById('adminBtnTxt').textContent='Admin Panel';
+            document.getElementById('adminBtn').classList.add('admin-on');
+            renderAdminList();
+            document.getElementById('loginEmail').value=''; document.getElementById('loginPwd').value='';
+            err.classList.remove('show');
+        } else { err.classList.add('show'); document.getElementById('loginPwd').value=''; }
+    }
+
+    function doLogout() {
+        isAdmin=false; closeAdmin();
+        document.getElementById('adminBtnTxt').textContent='Admin Access';
+        document.getElementById('adminBtn').classList.remove('admin-on');
+    }
+
+    function openAddForm() {
+        editMode=false;
+        document.getElementById('editId').value='';
+        document.getElementById('formTitle').textContent='Add New Client';
+        document.getElementById('formSaveBtn').textContent='Add Client';
+        clearForm(); document.getElementById('formWrap').classList.add('open');
+    }
+
+    function openEditForm(id) {
+        const c=clients.find(x=>x.id===id); if(!c) return;
+        editMode=true;
+        document.getElementById('editId').value=id;
+        document.getElementById('formTitle').textContent='Edit Client';
+        document.getElementById('formSaveBtn').textContent='Save Changes';
+        document.getElementById('fName').value=c.name||'';
+        document.getElementById('fEmail').value=c.email||'';
+        document.getElementById('fPhone').value=c.phone||'';
+        document.getElementById('fLogin').value=c.loginUrl||'';
+        document.getElementById('fContact').value=c.contactUrl||'';
+        document.getElementById('formWrap').classList.add('open');
+        document.getElementById('formWrap').scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
+
+    function closeForm() { document.getElementById('formWrap').classList.remove('open'); clearForm(); editMode=false; }
+    function clearForm() { ['fName','fEmail','fPhone','fLogin','fContact'].forEach(id=>document.getElementById(id).value=''); document.getElementById('editId').value=''; }
+
+    function saveClient() {
+        const name=document.getElementById('fName').value.trim(), email=document.getElementById('fEmail').value.trim(),
+              phone=document.getElementById('fPhone').value.trim(), loginUrl=document.getElementById('fLogin').value.trim(),
+              contactUrl=document.getElementById('fContact').value.trim();
+        if(!name||!loginUrl){ alert('Client Name and Login URL are required.'); return; }
+        if(editMode){
+            const id=document.getElementById('editId').value, idx=clients.findIndex(x=>x.id===id);
+            if(idx!==-1) clients[idx]={...clients[idx],name,email,phone,loginUrl,contactUrl};
+        } else {
+            clients.push({id:Date.now().toString(),name,email,phone,loginUrl,contactUrl,createdAt:new Date().toISOString()});
+        }
+        save(); render(); closeForm();
+    }
+
+    function deleteClient(id) {
+        if(!confirm('Delete this client? This cannot be undone.')) return;
+        clients=clients.filter(c=>c.id!==id); save(); render();
+    }
+
+    function closeLogin() { document.getElementById('loginOverlay').classList.remove('active'); document.getElementById('loginErr').classList.remove('show'); }
+    function closeAdmin() { document.getElementById('adminOverlay').classList.remove('active'); closeForm(); }
+    function overlayClick(e,id) { if(e.target.id===id){ id==='loginOverlay'?closeLogin():closeAdmin(); } }
+
+    function togglePwd() {
+        const inp=document.getElementById('loginPwd'), ico=document.getElementById('eyeIco');
+        if(inp.type==='password'){ inp.type='text'; ico.innerHTML=`<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`; }
+        else { inp.type='password'; ico.innerHTML=`<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`; }
+    }
+
+    function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function escA(s){ return String(s||'').replace(/'/g,"\\'"); }
+</script>
+</body>
+</html>
