@@ -53,13 +53,44 @@
         @keyframes d2 { 0%{transform:translate(0,0)} 100%{transform:translate(-40px,-30px)} }
         @keyframes d3 { 0%{transform:translate(-50%,-50%) scale(1)} 100%{transform:translate(calc(-50% + 40px),calc(-50% + 30px)) scale(1.12)} }
 
+        /* ── LOADING SCREEN ── */
+        #loadingScreen {
+            position: fixed; inset: 0; z-index: 9999;
+            background: var(--bg);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+        }
+        #loadingScreen svg { width: 56px; height: 56px; filter: drop-shadow(0 4px 20px rgba(99,102,241,0.5)); animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.95)} }
+        .loading-text { font-size: 0.88rem; color: var(--text-muted); letter-spacing: 1px; }
+        .loading-bar { width: 180px; height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+        .loading-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; animation: loadBar 1.8s ease-in-out infinite; }
+        @keyframes loadBar { 0%{width:0%;margin-left:0} 50%{width:70%;margin-left:0} 100%{width:0%;margin-left:100%} }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed; bottom: 28px; right: 28px; z-index: 9000;
+            padding: 13px 20px;
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
+            font-size: 0.88rem; color: var(--text);
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            transform: translateY(20px); opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            pointer-events: none;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { border-color: rgba(16,185,129,0.35); }
+        .toast.error   { border-color: rgba(239,68,68,0.35); }
+        .toast-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .toast.success .toast-dot { background: #10B981; }
+        .toast.error   .toast-dot { background: #EF4444; }
+
         /* ── NAVBAR ── */
         .navbar {
             position: sticky; top: 0; z-index: 200;
             height: 72px; padding: 0 3rem;
             display: flex; align-items: center; justify-content: space-between;
-            background: rgba(5,6,15,0.85);
-            backdrop-filter: blur(24px);
+            background: rgba(5,6,15,0.85); backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--border);
         }
         .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
@@ -69,26 +100,24 @@
         .nav-brand-sub { font-size: 0.62rem; font-weight: 500; color: var(--text-muted); letter-spacing: 2.5px; text-transform: uppercase; }
         .nav-right { display: flex; align-items: center; gap: 12px; }
         .count-pill { padding: 5px 14px; background: var(--gold-dim); border: 1px solid rgba(252,211,77,0.2); border-radius: 100px; font-size: 0.74rem; font-weight: 600; color: var(--gold); }
-        .btn-admin {
-            display: flex; align-items: center; gap: 8px;
-            padding: 9px 18px;
-            background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.28);
-            border-radius: 10px; color: var(--text);
-            font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500;
-            cursor: pointer; transition: all 0.25s;
-        }
+        .btn-admin { display: flex; align-items: center; gap: 8px; padding: 9px 18px; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.28); border-radius: 10px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.25s; }
         .btn-admin:hover { background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.5); box-shadow: 0 0 20px rgba(99,102,241,0.2); }
         .btn-admin.admin-on { background: var(--gold-dim); border-color: rgba(252,211,77,0.35); color: var(--gold); }
 
+        /* ── FIREBASE STATUS INDICATOR ── */
+        .fb-status {
+            display: flex; align-items: center; gap: 6px;
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+            border-radius: 100px; font-size: 0.7rem; color: var(--text-dim);
+        }
+        .fb-dot { width: 6px; height: 6px; border-radius: 50%; background: #6B7280; transition: background 0.4s; }
+        .fb-dot.connected { background: #10B981; box-shadow: 0 0 6px #10B981; }
+        .fb-dot.error { background: #EF4444; }
+
         /* ── HERO ── */
         .hero { position: relative; z-index: 1; padding: 80px 3rem 50px; text-align: center; }
-        .hero-eyebrow {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 5px 16px;
-            background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.22);
-            border-radius: 100px; font-size: 0.74rem; font-weight: 600;
-            color: var(--accent2); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 26px;
-        }
+        .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 5px 16px; background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.22); border-radius: 100px; font-size: 0.74rem; font-weight: 600; color: var(--accent2); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 26px; }
         .hero-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 8px var(--accent); animation: blink 2s ease-in-out infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
         .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 5vw, 4.2rem); font-weight: 900; line-height: 1.08; letter-spacing: -2px; color: var(--text); margin-bottom: 18px; }
@@ -109,14 +138,7 @@
 
         /* ── CLIENT CARDS ── */
         .clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1.5rem; }
-        .client-card {
-            position: relative;
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 20px; padding: 26px;
-            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
-            overflow: hidden;
-            animation: cardIn 0.5s ease both;
-        }
+        .client-card { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 26px; transition: all 0.35s cubic-bezier(0.4,0,0.2,1); overflow: hidden; animation: cardIn 0.5s ease both; }
         @keyframes cardIn { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
         .client-card:nth-child(1){animation-delay:.05s} .client-card:nth-child(2){animation-delay:.1s}
         .client-card:nth-child(3){animation-delay:.15s} .client-card:nth-child(4){animation-delay:.2s}
@@ -124,16 +146,9 @@
         .client-card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#4338ca,#6366f1,#fcd34d); opacity:0; transition:opacity 0.3s; }
         .client-card:hover { transform:translateY(-6px); border-color:rgba(99,102,241,0.28); box-shadow:0 20px 55px rgba(0,0,0,0.45),0 0 35px var(--card-glow); }
         .client-card:hover::after { opacity:1; }
-
         .card-logo-row { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px; }
-        .card-logo-box {
-            width:60px; height:60px;
-            background:linear-gradient(135deg,rgba(67,56,202,0.12),rgba(99,102,241,0.08));
-            border:1px solid rgba(99,102,241,0.18); border-radius:14px;
-            display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden;
-        }
+        .card-logo-box { width:60px; height:60px; background:linear-gradient(135deg,rgba(67,56,202,0.12),rgba(99,102,241,0.08)); border:1px solid rgba(99,102,241,0.18); border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; }
         .card-logo-box svg { width:38px; height:38px; }
-
         .badge-premium { padding:4px 10px; background:var(--gold-dim); border:1px solid rgba(252,211,77,0.2); border-radius:100px; font-size:0.68rem; font-weight:600; color:var(--gold); text-transform:uppercase; letter-spacing:0.5px; }
         .card-name { font-family:'Playfair Display',serif; font-size:1.25rem; font-weight:700; color:var(--text); margin-bottom:5px; line-height:1.2; }
         .card-since { font-size:0.78rem; color:var(--text-dim); }
@@ -205,9 +220,10 @@
         .admin-inp { width:100%; padding:10px 13px; background:var(--surface); border:1px solid var(--border); border-radius:9px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none; transition:all 0.22s; }
         .admin-inp:focus { border-color:rgba(99,102,241,0.45); background:rgba(99,102,241,0.04); box-shadow:0 0 0 3px rgba(99,102,241,0.08); }
         .admin-inp::placeholder { color:var(--text-dim); }
-        .form-btns { display:flex; gap:9px; justify-content:flex-end; }
+        .form-btns { display:flex; gap:9px; justify-content:flex-end; align-items:center; }
         .btn-save { padding:9px 22px; background:linear-gradient(135deg,#4338ca,#6366f1); border:none; border-radius:9px; color:white; font-family:'DM Sans',sans-serif; font-size:0.88rem; font-weight:600; cursor:pointer; transition:all 0.22s; }
         .btn-save:hover { transform:translateY(-1px); box-shadow:0 5px 18px rgba(99,102,241,0.4); }
+        .btn-save:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
         .btn-cancel2 { padding:9px 18px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:9px; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:0.88rem; cursor:pointer; transition:all 0.2s; }
         .btn-cancel2:hover { background:rgba(255,255,255,0.07); }
 
@@ -238,12 +254,12 @@
         .footer-brand { font-family:'Playfair Display',serif; font-size:0.88rem; color:var(--text-muted); }
         .footer-note { font-size:0.78rem; color:var(--text-dim); }
 
-        /* ── RESPONSIVE ── */
         @media(max-width:768px){
             .navbar{padding:0 1.5rem} .hero{padding:50px 1.5rem 36px} .section{padding:0 1.5rem 60px}
             .stats-row{display:none} .clients-grid{grid-template-columns:1fr} .form-grid{grid-template-columns:1fr}
             .admin-topbar{flex-direction:column;gap:14px;align-items:flex-start} .admin-tb-right{width:100%}
             .admin-row{flex-direction:column;align-items:flex-start;gap:10px} .footer{flex-direction:column;gap:8px;text-align:center}
+            .fb-status{display:none}
         }
         @media(max-width:480px){ .hero-title{font-size:2.2rem} .login-modal{padding:28px 22px} }
         .hidden{display:none!important}
@@ -251,42 +267,63 @@
 </head>
 <body>
 
+<!-- ── LOADING SCREEN ── -->
+<div id="loadingScreen">
+    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="ls-sg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4338CA"/><stop offset="100%" stop-color="#6366F1"/>
+            </linearGradient>
+            <filter id="ls-sdw" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="12" stdDeviation="24" flood-color="#1E1B4B" flood-opacity="0.55"/>
+            </filter>
+            <filter id="ls-sglow"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#ls-sg)" filter="url(#ls-sdw)"/>
+        <rect x="174" y="168" width="164" height="23" rx="11.5" fill="white" fill-opacity="0.95"/>
+        <rect x="174" y="212" width="128" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
+        <rect x="174" y="256" width="146" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
+        <g filter="url(#ls-sglow)"><path d="M256 316 L270 338 L295 330 L282 352 L298 372 L273 370 L256 392 L239 370 L214 372 L230 352 L217 330 L242 338 Z" fill="#FCD34D" fill-opacity="0.97"/></g>
+    </svg>
+    <div class="loading-text">Connecting to Firebase…</div>
+    <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+</div>
+
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
 
-<!-- InvoicePrime SVG logo symbol (reused everywhere) -->
+<!-- Reusable logo symbol -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <symbol id="ip-logo" viewBox="0 0 512 512">
         <defs>
             <linearGradient id="sg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#4338CA"/>
-                <stop offset="100%" stop-color="#6366F1"/>
+                <stop offset="0%" stop-color="#4338CA"/><stop offset="100%" stop-color="#6366F1"/>
             </linearGradient>
             <linearGradient id="sh" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>
-                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
             </linearGradient>
             <filter id="sdw" x="-20%" y="-20%" width="140%" height="140%">
                 <feDropShadow dx="0" dy="12" stdDeviation="24" flood-color="#1E1B4B" flood-opacity="0.55"/>
             </filter>
-            <filter id="sglow">
-                <feGaussianBlur stdDeviation="6" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
+            <filter id="sglow"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
         <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#sg)" filter="url(#sdw)"/>
         <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#sh)"/>
         <rect x="174" y="168" width="164" height="23" rx="11.5" fill="white" fill-opacity="0.95"/>
         <rect x="174" y="212" width="128" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
         <rect x="174" y="256" width="146" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
-        <g filter="url(#sglow)">
-            <path d="M256 316 L270 338 L295 330 L282 352 L298 372 L273 370 L256 392 L239 370 L214 372 L230 352 L217 330 L242 338 Z" fill="#FCD34D" fill-opacity="0.97"/>
-        </g>
+        <g filter="url(#sglow)"><path d="M256 316 L270 338 L295 330 L282 352 L298 372 L273 370 L256 392 L239 370 L214 372 L230 352 L217 330 L242 338 Z" fill="#FCD34D" fill-opacity="0.97"/></g>
     </symbol>
 </svg>
 
-<!-- ══ NAVBAR ══ -->
+<!-- ── TOAST ── -->
+<div class="toast" id="toast">
+    <div class="toast-dot"></div>
+    <span id="toastMsg"></span>
+</div>
+
+<!-- ── NAVBAR ── -->
 <nav class="navbar">
     <a class="nav-logo" href="#">
         <svg class="nav-logo-svg" viewBox="0 0 512 512"><use href="#ip-logo"/></svg>
@@ -296,6 +333,10 @@
         </div>
     </a>
     <div class="nav-right">
+        <div class="fb-status">
+            <div class="fb-dot" id="fbDot"></div>
+            <span id="fbLabel">Connecting…</span>
+        </div>
         <span class="count-pill" id="navCount">0 Clients</span>
         <button class="btn-admin" id="adminBtn" onclick="handleAdmin()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -307,20 +348,20 @@
     </div>
 </nav>
 
-<!-- ══ HERO ══ -->
+<!-- ── HERO ── -->
 <section class="hero">
     <div class="hero-eyebrow"><div class="hero-dot"></div>Secure Portal</div>
     <h1 class="hero-title">Manage <span>Our Clients</span><br>Professionally</h1>
-    <p class="hero-desc">A centralised portal to manage all client accounts, login access, and contact details — all in one place.</p>
+    <p class="hero-desc">A centralised portal to manage all client accounts, login access, and contact details — synced live across all devices.</p>
 </section>
 
 <div class="stats-row">
     <div class="stat"><span class="stat-n" id="statN">0</span><span class="stat-l">Active Clients</span></div>
-    <div class="stat"><span class="stat-n">100%</span><span class="stat-l">Uptime</span></div>
+    <div class="stat"><span class="stat-n">Live</span><span class="stat-l">Firebase Sync</span></div>
     <div class="stat"><span class="stat-n">SSL</span><span class="stat-l">Secured</span></div>
 </div>
 
-<!-- ══ CLIENTS ══ -->
+<!-- ── CLIENTS ── -->
 <main class="section">
     <div class="section-head">
         <span class="section-tag">Our Clients</span>
@@ -339,23 +380,21 @@
     </div>
 </main>
 
-<!-- ══ FOOTER ══ -->
+<!-- ── FOOTER ── -->
 <footer class="footer">
     <div class="footer-left">
         <svg viewBox="0 0 512 512"><use href="#ip-logo"/></svg>
         <span class="footer-brand">InvoicePrime — Client Portal</span>
     </div>
-    <span class="footer-note">All data stored securely in your browser</span>
+    <span class="footer-note">Data synced live via Firebase Firestore</span>
 </footer>
 
-<!-- ══ LOGIN OVERLAY ══ -->
+<!-- ── LOGIN OVERLAY ── -->
 <div class="overlay" id="loginOverlay" onclick="overlayClick(event,'loginOverlay')">
     <div class="login-modal">
         <button class="close-x" onclick="closeLogin()">×</button>
         <div class="login-head">
-            <div class="login-logo-ring">
-                <svg viewBox="0 0 512 512"><use href="#ip-logo"/></svg>
-            </div>
+            <div class="login-logo-ring"><svg viewBox="0 0 512 512"><use href="#ip-logo"/></svg></div>
             <h2 class="login-title">Admin Access</h2>
             <p class="login-sub">Sign in to manage your client portal</p>
         </div>
@@ -383,16 +422,13 @@
     </div>
 </div>
 
-<!-- ══ ADMIN OVERLAY ══ -->
+<!-- ── ADMIN OVERLAY ── -->
 <div class="overlay" id="adminOverlay" onclick="overlayClick(event,'adminOverlay')">
     <div class="admin-modal">
         <button class="close-x" style="position:absolute;top:14px;right:14px;z-index:10" onclick="closeAdmin()">×</button>
-
         <div class="admin-topbar">
             <div class="admin-tb-left">
-                <div class="admin-topbar-logo">
-                    <svg viewBox="0 0 512 512"><use href="#ip-logo"/></svg>
-                </div>
+                <div class="admin-topbar-logo"><svg viewBox="0 0 512 512"><use href="#ip-logo"/></svg></div>
                 <h2 class="admin-title">Client Management</h2>
                 <span class="admin-count-badge" id="adminBadge">0 Clients</span>
             </div>
@@ -405,7 +441,6 @@
             </div>
         </div>
 
-        <!-- Add / Edit Form -->
         <div class="admin-form-wrap" id="formWrap">
             <div class="form-title" id="formTitle">Add New Client</div>
             <input type="hidden" id="editId"/>
@@ -441,215 +476,339 @@
     </div>
 </div>
 
+<!-- ═══════════════════════════════════════════ -->
+<!-- Firebase SDK (v9 compat mode — no bundler needed) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script>
-    const ADMIN_EMAIL    = 'Adithya@business.com';
-    const ADMIN_PASSWORD = 'Business@2026';
-    const KEY            = 'invoiceprime_clients';
+// ╔══════════════════════════════════════════════╗
+// ║   STEP 4 — PASTE YOUR FIREBASE CONFIG HERE   ║
+// ╚══════════════════════════════════════════════╝
+const firebaseConfig = {
+    apiKey:            "AIzaSyBL61_nolBAf21gbQ0eHDR7tcwp6LFn3oc",
+    authDomain:        "client-mgt-syst.firebaseapp.com",
+    projectId:         "client-mgt-syst",
+    storageBucket:     "client-mgt-syst.firebasestorage.app",
+    messagingSenderId: "556353463793",
+    appId:             "1:556353463793:web:cd6d482f65b385dec39050"
+};
 
-    let clients  = [];
-    let isAdmin  = false;
-    let editMode = false;
+// ── Init Firebase ─────────────────────────────
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const COLLECTION = 'clients'; // Firestore collection name
 
-    // Inline logo SVG for dynamic injection (card & admin list)
-    const LOGO_HTML = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-        <defs>
-            <linearGradient id="lg1" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#4338CA"/><stop offset="100%" stop-color="#6366F1"/>
-            </linearGradient>
-            <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-            </linearGradient>
-            <filter id="lf1" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1E1B4B" flood-opacity="0.5"/>
-            </filter>
-            <filter id="lf2">
-                <feGaussianBlur stdDeviation="3" result="b"/>
-                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-        </defs>
-        <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#lg1)" filter="url(#lf1)"/>
-        <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#lg2)"/>
-        <rect x="174" y="168" width="164" height="23" rx="11.5" fill="white" fill-opacity="0.95"/>
-        <rect x="174" y="212" width="128" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
-        <rect x="174" y="256" width="146" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
-        <g filter="url(#lf2)">
-            <path d="M256 316 L270 338 L295 330 L282 352 L298 372 L273 370 L256 392 L239 370 L214 372 L230 352 L217 330 L242 338 Z" fill="#FCD34D" fill-opacity="0.97"/>
-        </g>
-    </svg>`;
+// ── App State ─────────────────────────────────
+const ADMIN_EMAIL    = 'Adithya@business.com';
+const ADMIN_PASSWORD = 'Business@2026';
 
-    document.addEventListener('DOMContentLoaded', () => {
-        try { clients = JSON.parse(localStorage.getItem(KEY)) || []; } catch(e){ clients=[]; }
-        render();
-        document.getElementById('loginPwd').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-        document.getElementById('loginEmail').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-    });
+let clients  = [];
+let isAdmin  = false;
+let editMode = false;
+let unsubscribe = null; // holds the Firestore live listener
 
-    function save() { localStorage.setItem(KEY, JSON.stringify(clients)); }
+// ── Inline logo HTML for dynamic cards ────────
+const LOGO_HTML = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+    <defs>
+        <linearGradient id="cl1" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#4338CA"/><stop offset="100%" stop-color="#6366F1"/>
+        </linearGradient>
+        <linearGradient id="cl2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </linearGradient>
+        <filter id="clf1" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1E1B4B" flood-opacity="0.5"/>
+        </filter>
+        <filter id="clf2"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#cl1)" filter="url(#clf1)"/>
+    <path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#cl2)"/>
+    <rect x="174" y="168" width="164" height="23" rx="11.5" fill="white" fill-opacity="0.95"/>
+    <rect x="174" y="212" width="128" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
+    <rect x="174" y="256" width="146" height="23" rx="11.5" fill="white" fill-opacity="0.75"/>
+    <g filter="url(#clf2)">
+        <path d="M256 316 L270 338 L295 330 L282 352 L298 372 L273 370 L256 392 L239 370 L214 372 L230 352 L217 330 L242 338 Z" fill="#FCD34D" fill-opacity="0.97"/>
+    </g>
+</svg>`;
 
-    function render() { renderPublic(); renderAdminList(); updateCounts(); }
+// ══════════════════════════════════════════════
+// FIREBASE: Real-time listener — auto-updates
+// the page whenever data changes in Firestore
+// ══════════════════════════════════════════════
+function startFirebaseListener() {
+    setFbStatus('connecting');
 
-    function renderPublic() {
-        const grid  = document.getElementById('clientsGrid');
-        const empty = document.getElementById('emptyState');
-        if (!clients.length) { grid.innerHTML=''; empty.classList.remove('hidden'); return; }
-        empty.classList.add('hidden');
+    unsubscribe = db.collection(COLLECTION)
+        .orderBy('createdAt', 'asc')
+        .onSnapshot(
+            (snapshot) => {
+                clients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                render();
+                setFbStatus('connected');
+                hideLoading();
+            },
+            (error) => {
+                console.error('Firestore error:', error);
+                setFbStatus('error');
+                hideLoading();
+                showToast('Firebase connection failed. Check your config.', 'error');
+            }
+        );
+}
 
-        grid.innerHTML = clients.map((c,i) => {
-            const date = c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-IN',{year:'numeric',month:'short'}) : '';
-            const tags = [];
-            if (c.email) tags.push(`<span class="ctag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</span>`);
-            if (c.phone) tags.push(`<span class="ctag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${esc(c.phone)}</span>`);
-            return `
-            <div class="client-card" style="animation-delay:${i*0.06}s">
-                <div class="card-logo-row">
-                    <div class="card-logo-box">${LOGO_HTML}</div>
-                    <span class="badge-premium">Premium</span>
+function setFbStatus(state) {
+    const dot   = document.getElementById('fbDot');
+    const label = document.getElementById('fbLabel');
+    dot.className = 'fb-dot';
+    if (state === 'connected')  { dot.classList.add('connected'); label.textContent = 'Live'; }
+    else if (state === 'error') { dot.classList.add('error');     label.textContent = 'Error'; }
+    else                        {                                  label.textContent = 'Connecting…'; }
+}
+
+function hideLoading() {
+    const ls = document.getElementById('loadingScreen');
+    ls.style.transition = 'opacity 0.5s ease';
+    ls.style.opacity = '0';
+    setTimeout(() => ls.style.display = 'none', 500);
+}
+
+// ── Init ──────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    startFirebaseListener();
+    document.getElementById('loginPwd').addEventListener('keydown',  e => { if(e.key==='Enter') doLogin(); });
+    document.getElementById('loginEmail').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+});
+
+// ══════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════
+function render() { renderPublic(); renderAdminList(); updateCounts(); }
+
+function renderPublic() {
+    const grid  = document.getElementById('clientsGrid');
+    const empty = document.getElementById('emptyState');
+    if (!clients.length) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+
+    grid.innerHTML = clients.map((c, i) => {
+        const date = c.createdAt?.toDate
+            ? c.createdAt.toDate().toLocaleDateString('en-IN', {year:'numeric', month:'short'})
+            : c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-IN', {year:'numeric', month:'short'}) : '';
+        const tags = [];
+        if (c.email) tags.push(`<span class="ctag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</span>`);
+        if (c.phone) tags.push(`<span class="ctag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${esc(c.phone)}</span>`);
+        return `
+        <div class="client-card" style="animation-delay:${i*0.06}s">
+            <div class="card-logo-row">
+                <div class="card-logo-box">${LOGO_HTML}</div>
+                <span class="badge-premium">Premium</span>
+            </div>
+            <div class="card-name">${esc(c.name)}</div>
+            ${date ? `<div class="card-since">Client since ${date}</div>` : ''}
+            <div class="card-divider"></div>
+            ${tags.length ? `<div class="card-tags">${tags.join('')}</div>` : ''}
+            <div class="card-actions">
+                <button class="btn-login" onclick="goLogin('${escA(c.loginUrl)}')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    Client Login
+                </button>
+                <button class="btn-contact" onclick="goContact('${esc(c.id)}')" title="Contact">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function renderAdminList() {
+    const body = document.getElementById('adminBody');
+    if (!body) return;
+    if (!clients.length) {
+        body.innerHTML = `<div class="admin-empty"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><p>No clients yet. Click <strong>Add New Client</strong> to start.</p></div>`;
+        return;
+    }
+    body.innerHTML = clients.map(c => `
+        <div class="admin-row">
+            <div class="admin-logo-sm">${LOGO_HTML}</div>
+            <div class="admin-row-info">
+                <div class="admin-row-name">${esc(c.name)}</div>
+                <div class="admin-row-meta">
+                    ${c.email ? `<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</span>` : ''}
+                    ${c.phone ? `<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${esc(c.phone)}</span>` : ''}
+                    <span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>${esc(c.loginUrl)}</span>
                 </div>
-                <div class="card-name">${esc(c.name)}</div>
-                ${date?`<div class="card-since">Client since ${date}</div>`:''}
-                <div class="card-divider"></div>
-                ${tags.length?`<div class="card-tags">${tags.join('')}</div>`:''}
-                <div class="card-actions">
-                    <button class="btn-login" onclick="goLogin('${escA(c.loginUrl)}')">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-                        Client Login
-                    </button>
-                    <button class="btn-contact" onclick="goContact('${esc(c.id)}')" title="Contact">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    </button>
-                </div>
-            </div>`;
-        }).join('');
+            </div>
+            <div class="admin-row-actions">
+                <button class="icon-btn" onclick="openEditForm('${esc(c.id)}')" title="Edit">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+                <button class="icon-btn" onclick="window.open('${escA(c.loginUrl)}','_blank')" title="Open Portal">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </button>
+                <button class="icon-btn del" onclick="deleteClient('${esc(c.id)}')" title="Delete">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+            </div>
+        </div>`).join('');
+}
+
+function updateCounts() {
+    const n = clients.length, l = `${n} Client${n !== 1 ? 's' : ''}`;
+    document.getElementById('navCount').textContent = l;
+    document.getElementById('adminBadge').textContent = l;
+    document.getElementById('statN').textContent = n;
+}
+
+// ── Client Actions ────────────────────────────
+function goLogin(url) { if(url) window.open(url, '_blank', 'noopener,noreferrer'); }
+function goContact(id) {
+    const c = clients.find(x => x.id === id); if (!c) return;
+    if (c.contactUrl) window.open(c.contactUrl, '_blank', 'noopener,noreferrer');
+    else if (c.email) window.location.href = `mailto:${c.email}`;
+}
+
+// ── Admin Auth ────────────────────────────────
+function handleAdmin() {
+    if (isAdmin) { document.getElementById('adminOverlay').classList.add('active'); renderAdminList(); }
+    else { document.getElementById('loginOverlay').classList.add('active'); setTimeout(() => document.getElementById('loginEmail').focus(), 80); }
+}
+
+function doLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pwd   = document.getElementById('loginPwd').value;
+    const err   = document.getElementById('loginErr');
+    if (email === ADMIN_EMAIL && pwd === ADMIN_PASSWORD) {
+        isAdmin = true; closeLogin();
+        document.getElementById('adminOverlay').classList.add('active');
+        document.getElementById('adminBtnTxt').textContent = 'Admin Panel';
+        document.getElementById('adminBtn').classList.add('admin-on');
+        renderAdminList();
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPwd').value   = '';
+        err.classList.remove('show');
+    } else {
+        err.classList.add('show');
+        document.getElementById('loginPwd').value = '';
     }
+}
 
-    function renderAdminList() {
-        const body = document.getElementById('adminBody');
-        if (!body) return;
-        if (!clients.length) {
-            body.innerHTML=`<div class="admin-empty"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><p>No clients yet. Click <strong>Add New Client</strong> to start.</p></div>`;
-            return;
-        }
-        body.innerHTML = clients.map(c=>`
-            <div class="admin-row">
-                <div class="admin-logo-sm">${LOGO_HTML}</div>
-                <div class="admin-row-info">
-                    <div class="admin-row-name">${esc(c.name)}</div>
-                    <div class="admin-row-meta">
-                        ${c.email?`<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</span>`:''}
-                        ${c.phone?`<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${esc(c.phone)}</span>`:''}
-                        <span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>${esc(c.loginUrl)}</span>
-                    </div>
-                </div>
-                <div class="admin-row-actions">
-                    <button class="icon-btn" onclick="openEditForm('${esc(c.id)}')" title="Edit Client">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    </button>
-                    <button class="icon-btn" onclick="window.open('${escA(c.loginUrl)}','_blank')" title="Open Portal">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                    </button>
-                    <button class="icon-btn del" onclick="deleteClient('${esc(c.id)}')" title="Delete">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                    </button>
-                </div>
-            </div>`).join('');
-    }
+function doLogout() {
+    isAdmin = false; closeAdmin();
+    document.getElementById('adminBtnTxt').textContent = 'Admin Access';
+    document.getElementById('adminBtn').classList.remove('admin-on');
+}
 
-    function updateCounts() {
-        const n = clients.length, l = `${n} Client${n!==1?'s':''}`;
-        document.getElementById('navCount').textContent = l;
-        document.getElementById('adminBadge').textContent = l;
-        document.getElementById('statN').textContent = n;
-    }
+// ══════════════════════════════════════════════
+// FIREBASE CRUD
+// ══════════════════════════════════════════════
+async function saveClient() {
+    const name       = document.getElementById('fName').value.trim();
+    const email      = document.getElementById('fEmail').value.trim();
+    const phone      = document.getElementById('fPhone').value.trim();
+    const loginUrl   = document.getElementById('fLogin').value.trim();
+    const contactUrl = document.getElementById('fContact').value.trim();
 
-    function goLogin(url) { if(url) window.open(url,'_blank','noopener,noreferrer'); }
-    function goContact(id) {
-        const c=clients.find(x=>x.id===id); if(!c) return;
-        if(c.contactUrl) window.open(c.contactUrl,'_blank','noopener,noreferrer');
-        else if(c.email) window.location.href=`mailto:${c.email}`;
-    }
+    if (!name || !loginUrl) { alert('Client Name and Login URL are required.'); return; }
 
-    function handleAdmin() {
-        if(isAdmin){ document.getElementById('adminOverlay').classList.add('active'); renderAdminList(); }
-        else { document.getElementById('loginOverlay').classList.add('active'); setTimeout(()=>document.getElementById('loginEmail').focus(),80); }
-    }
+    const saveBtn = document.getElementById('formSaveBtn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving…';
 
-    function doLogin() {
-        const email=document.getElementById('loginEmail').value.trim(), pwd=document.getElementById('loginPwd').value;
-        const err=document.getElementById('loginErr');
-        if(email===ADMIN_EMAIL && pwd===ADMIN_PASSWORD){
-            isAdmin=true; closeLogin();
-            document.getElementById('adminOverlay').classList.add('active');
-            document.getElementById('adminBtnTxt').textContent='Admin Panel';
-            document.getElementById('adminBtn').classList.add('admin-on');
-            renderAdminList();
-            document.getElementById('loginEmail').value=''; document.getElementById('loginPwd').value='';
-            err.classList.remove('show');
-        } else { err.classList.add('show'); document.getElementById('loginPwd').value=''; }
-    }
-
-    function doLogout() {
-        isAdmin=false; closeAdmin();
-        document.getElementById('adminBtnTxt').textContent='Admin Access';
-        document.getElementById('adminBtn').classList.remove('admin-on');
-    }
-
-    function openAddForm() {
-        editMode=false;
-        document.getElementById('editId').value='';
-        document.getElementById('formTitle').textContent='Add New Client';
-        document.getElementById('formSaveBtn').textContent='Add Client';
-        clearForm(); document.getElementById('formWrap').classList.add('open');
-    }
-
-    function openEditForm(id) {
-        const c=clients.find(x=>x.id===id); if(!c) return;
-        editMode=true;
-        document.getElementById('editId').value=id;
-        document.getElementById('formTitle').textContent='Edit Client';
-        document.getElementById('formSaveBtn').textContent='Save Changes';
-        document.getElementById('fName').value=c.name||'';
-        document.getElementById('fEmail').value=c.email||'';
-        document.getElementById('fPhone').value=c.phone||'';
-        document.getElementById('fLogin').value=c.loginUrl||'';
-        document.getElementById('fContact').value=c.contactUrl||'';
-        document.getElementById('formWrap').classList.add('open');
-        document.getElementById('formWrap').scrollIntoView({behavior:'smooth',block:'nearest'});
-    }
-
-    function closeForm() { document.getElementById('formWrap').classList.remove('open'); clearForm(); editMode=false; }
-    function clearForm() { ['fName','fEmail','fPhone','fLogin','fContact'].forEach(id=>document.getElementById(id).value=''); document.getElementById('editId').value=''; }
-
-    function saveClient() {
-        const name=document.getElementById('fName').value.trim(), email=document.getElementById('fEmail').value.trim(),
-              phone=document.getElementById('fPhone').value.trim(), loginUrl=document.getElementById('fLogin').value.trim(),
-              contactUrl=document.getElementById('fContact').value.trim();
-        if(!name||!loginUrl){ alert('Client Name and Login URL are required.'); return; }
-        if(editMode){
-            const id=document.getElementById('editId').value, idx=clients.findIndex(x=>x.id===id);
-            if(idx!==-1) clients[idx]={...clients[idx],name,email,phone,loginUrl,contactUrl};
+    try {
+        if (editMode) {
+            // UPDATE existing document in Firestore
+            const id = document.getElementById('editId').value;
+            await db.collection(COLLECTION).doc(id).update({ name, email, phone, loginUrl, contactUrl });
+            showToast('Client updated successfully', 'success');
         } else {
-            clients.push({id:Date.now().toString(),name,email,phone,loginUrl,contactUrl,createdAt:new Date().toISOString()});
+            // ADD new document to Firestore
+            await db.collection(COLLECTION).add({
+                name, email, phone, loginUrl, contactUrl,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            showToast('Client added successfully', 'success');
         }
-        save(); render(); closeForm();
+        closeForm();
+    } catch (err) {
+        console.error('Save error:', err);
+        showToast('Failed to save. Check Firebase connection.', 'error');
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = editMode ? 'Save Changes' : 'Add Client';
     }
+}
 
-    function deleteClient(id) {
-        if(!confirm('Delete this client? This cannot be undone.')) return;
-        clients=clients.filter(c=>c.id!==id); save(); render();
+async function deleteClient(id) {
+    if (!confirm('Delete this client? This cannot be undone.')) return;
+    try {
+        await db.collection(COLLECTION).doc(id).delete();
+        showToast('Client deleted', 'success');
+    } catch (err) {
+        console.error('Delete error:', err);
+        showToast('Failed to delete. Check Firebase connection.', 'error');
     }
+}
 
-    function closeLogin() { document.getElementById('loginOverlay').classList.remove('active'); document.getElementById('loginErr').classList.remove('show'); }
-    function closeAdmin() { document.getElementById('adminOverlay').classList.remove('active'); closeForm(); }
-    function overlayClick(e,id) { if(e.target.id===id){ id==='loginOverlay'?closeLogin():closeAdmin(); } }
+// ── Form Helpers ──────────────────────────────
+function openAddForm() {
+    editMode = false;
+    document.getElementById('editId').value = '';
+    document.getElementById('formTitle').textContent = 'Add New Client';
+    document.getElementById('formSaveBtn').textContent = 'Add Client';
+    clearForm();
+    document.getElementById('formWrap').classList.add('open');
+}
 
-    function togglePwd() {
-        const inp=document.getElementById('loginPwd'), ico=document.getElementById('eyeIco');
-        if(inp.type==='password'){ inp.type='text'; ico.innerHTML=`<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`; }
-        else { inp.type='password'; ico.innerHTML=`<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`; }
-    }
+function openEditForm(id) {
+    const c = clients.find(x => x.id === id); if (!c) return;
+    editMode = true;
+    document.getElementById('editId').value = id;
+    document.getElementById('formTitle').textContent = 'Edit Client';
+    document.getElementById('formSaveBtn').textContent = 'Save Changes';
+    document.getElementById('fName').value    = c.name       || '';
+    document.getElementById('fEmail').value   = c.email      || '';
+    document.getElementById('fPhone').value   = c.phone      || '';
+    document.getElementById('fLogin').value   = c.loginUrl   || '';
+    document.getElementById('fContact').value = c.contactUrl || '';
+    document.getElementById('formWrap').classList.add('open');
+    document.getElementById('formWrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
 
-    function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    function escA(s){ return String(s||'').replace(/'/g,"\\'"); }
+function closeForm() {
+    document.getElementById('formWrap').classList.remove('open');
+    clearForm(); editMode = false;
+}
+
+function clearForm() {
+    ['fName','fEmail','fPhone','fLogin','fContact'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('editId').value = '';
+}
+
+// ── Modal Helpers ─────────────────────────────
+function closeLogin() { document.getElementById('loginOverlay').classList.remove('active'); document.getElementById('loginErr').classList.remove('show'); }
+function closeAdmin() { document.getElementById('adminOverlay').classList.remove('active'); closeForm(); }
+function overlayClick(e, id) { if (e.target.id === id) { id === 'loginOverlay' ? closeLogin() : closeAdmin(); } }
+
+function togglePwd() {
+    const inp = document.getElementById('loginPwd'), ico = document.getElementById('eyeIco');
+    if (inp.type === 'password') { inp.type = 'text'; ico.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`; }
+    else { inp.type = 'password'; ico.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`; }
+}
+
+// ── Toast Notification ────────────────────────
+let toastTimer;
+function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.className = `toast ${type} show`;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── Escape Helpers ────────────────────────────
+function esc(s)  { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escA(s) { return String(s || '').replace(/'/g, "\\'"); }
 </script>
 </body>
 </html>
