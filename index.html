@@ -86,26 +86,27 @@
         .section-head{display:flex;align-items:center;gap:14px;margin-bottom:32px;}
         .section-tag{font-size:0.73rem;font-weight:600;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;}
         .section-line{height:1px;flex:1;background:linear-gradient(90deg,var(--border),transparent);}
-        .clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1.5rem;}
-        .client-card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);overflow:hidden;animation:cardIn 0.4s ease both;box-shadow:0 2px 16px var(--shadow);}
+                .clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;align-items:start;}
+        .client-card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);overflow:hidden;animation:cardIn 0.4s ease both;box-shadow:0 2px 16px var(--shadow);display:flex;flex-direction:column;}
         @keyframes cardIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
         .client-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4338ca,#6366f1,#fcd34d);opacity:0;transition:opacity 0.3s;}
         .client-card:hover{transform:translateY(-5px);border-color:rgba(99,102,241,0.3);box-shadow:0 20px 50px var(--shadow),0 0 30px var(--card-glow);}
         .client-card:hover::after{opacity:1;}
-        .card-logo-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
-        .card-logo-box{width:60px;height:60px;background:linear-gradient(135deg,rgba(67,56,202,0.12),rgba(99,102,241,0.08));border:1px solid rgba(99,102,241,0.18);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
-        .card-logo-box svg{width:38px;height:38px;}
-        .badge-premium{padding:4px 10px;background:var(--gold-dim);border:1px solid rgba(252,211,77,0.2);border-radius:100px;font-size:0.68rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;}
-        .card-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.2;}
-        .card-since{font-size:0.78rem;color:var(--text-dim);}
-        .card-divider{height:1px;background:var(--border);margin:18px 0;}
-        .card-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;}
-        .ctag{display:flex;align-items:center;gap:5px;padding:4px 9px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-size:0.7rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;}
-        .card-actions{display:grid;grid-template-columns:1fr auto;gap:9px;}
-        .btn-login{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border:none;border-radius:11px;background:linear-gradient(135deg,#4338ca 0%,#6366f1 100%);color:white;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;}
+        .card-logo-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:8px;}
+        /* Unique SVG client logos — shape + gradient + initials, zero storage */
+        .client-logo-wrap{flex-shrink:0;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.22));}
+        .client-logo-wrap svg{display:block;}
+        .badge-premium{padding:4px 10px;background:var(--gold-dim);border:1px solid rgba(252,211,77,0.2);border-radius:100px;font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;white-space:nowrap;align-self:flex-start;}
+        .card-name{font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.25;}
+        .card-since{font-size:0.74rem;color:var(--text-dim);}
+        .card-divider{height:1px;background:var(--border);margin:14px 0;}
+        .card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;min-height:26px;}
+        .ctag{display:flex;align-items:center;gap:4px;padding:3px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-size:0.68rem;color:var(--text-muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .card-actions{display:flex;gap:8px;margin-top:auto;}
+        .btn-login{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border:none;border-radius:11px;background:linear-gradient(135deg,#4338ca 0%,#6366f1 100%);color:white;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;}
         .btn-login::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.14) 0%,transparent 60%);}
         .btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(99,102,241,0.45);}
-        .btn-contact{display:flex;align-items:center;justify-content:center;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:11px;color:var(--text-muted);cursor:pointer;transition:all 0.25s;}
+        .btn-contact{display:flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;background:var(--surface2);border:1px solid var(--border);border-radius:11px;color:var(--text-muted);cursor:pointer;transition:all 0.25s;}
         .btn-contact:hover{background:var(--gold-dim);border-color:rgba(252,211,77,0.3);color:var(--gold);}
         .empty-state{grid-column:1/-1;text-align:center;padding:80px 20px;}
         .empty-icon-wrap{width:88px;height:88px;background:var(--surface);border:1px solid var(--border);border-radius:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;color:var(--text-dim);}
@@ -148,6 +149,8 @@
         .btn-add:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,102,241,0.45);}
         .btn-logout{padding:9px 16px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;color:#FCA5A5;font-family:'DM Sans',sans-serif;font-size:0.86rem;font-weight:500;cursor:pointer;transition:all 0.25s;}
         .btn-logout:hover{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.35);}
+        .btn-close-admin{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:9px;color:var(--text-muted);cursor:pointer;transition:all 0.2s;flex-shrink:0;}
+        .btn-close-admin:hover{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#FCA5A5;}
         .admin-form-wrap{padding:20px 28px;border-bottom:1px solid var(--border);background:rgba(99,102,241,0.03);flex-shrink:0;display:none;}
         .admin-form-wrap.open{display:block;}
         .form-title{font-weight:600;font-size:0.88rem;color:var(--accent2);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px;}
@@ -172,8 +175,8 @@
         .admin-body::-webkit-scrollbar-thumb{background:var(--scrollbar);border-radius:3px;}
         .admin-row{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:13px;margin-bottom:9px;transition:all 0.22s;}
         .admin-row:hover{background:rgba(99,102,241,0.05);border-color:rgba(99,102,241,0.2);}
-        .admin-logo-sm{width:42px;height:42px;background:linear-gradient(135deg,rgba(67,56,202,0.12),rgba(99,102,241,0.08));border:1px solid rgba(99,102,241,0.18);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
-        .admin-logo-sm svg{width:26px;height:26px;}
+        .admin-logo-sm{width:42px;height:42px;display:flex;align-items:center;justify-content:center;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.2));}
+        .admin-logo-sm svg{display:block;}
         .admin-row-info{flex:1;min-width:0;}
         .admin-row-name{font-weight:600;font-size:0.95rem;color:var(--text);margin-bottom:4px;}
         .admin-row-meta{display:flex;flex-wrap:wrap;gap:12px;font-size:0.77rem;color:var(--text-muted);}
@@ -277,10 +280,15 @@
 </div>
 <div class="overlay" id="adminOverlay" onclick="overlayClick(event,'adminOverlay')">
     <div class="admin-modal">
-        <button class="close-x" style="position:absolute;top:14px;right:14px;z-index:10" onclick="closeAdmin()">×</button>
         <div class="admin-topbar">
             <div class="admin-tb-left"><div class="admin-topbar-logo"><svg viewBox="0 0 512 512"><use href="#ip-logo"/></svg></div><h2 class="admin-title">Client Management</h2><span class="admin-count-badge" id="adminBadge">0 Clients</span></div>
-            <div class="admin-tb-right"><button class="btn-add" onclick="openAddForm()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add New Client</button><button class="btn-logout" onclick="doLogout()">Logout</button></div>
+            <div class="admin-tb-right">
+                <button class="btn-add" onclick="openAddForm()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add New Client</button>
+                <button class="btn-logout" onclick="doLogout()">Logout</button>
+                <button class="btn-close-admin" onclick="closeAdmin()" title="Close">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
         </div>
         <div class="admin-form-wrap" id="formWrap">
             <div class="form-title" id="formTitle">Add New Client</div>
@@ -331,7 +339,91 @@ function toggleTheme() {
 }
 (function(){ const s = localStorage.getItem('ip-theme'); if(s) document.documentElement.setAttribute('data-theme',s); })();
 
-const LOGO_HTML = `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="cl1" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#4338CA"/><stop offset="100%" stop-color="#6366F1"/></linearGradient><filter id="clf1" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1E1B4B" flood-opacity="0.5"/></filter><filter id="clf2"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M256 36 L72 110 V262 C72 368 160 456 256 480 C352 456 440 368 440 262 V110 Z" fill="url(#cl1)" filter="url(#clf1)"/><rect x="174" y="168" width="164" height="23" rx="11.5" fill="white" fill-opacity="0.95"/><rect x="174" y="212" width="128" height="23" rx="11.5" fill="white" fill-opacity="0.75"/><rect x="174" y="256" width="146" height="23" rx="11.5" fill="white" fill-opacity="0.75"/><g filter="url(#clf2)"><path d="M256 316 L270 338 L295 330 L282 352 L298 372 L273 370 L256 392 L239 370 L214 372 L230 352 L217 330 L242 338 Z" fill="#FCD34D" fill-opacity="0.97"/></g></svg>`;
+// ── Unique client logos — SVG shape + initials, 12 palettes, zero storage ──
+const LOGO_PALETTES = [
+    {c1:'#4338CA',c2:'#6366F1',c3:'#818CF8',shape:'hex'},
+    {c1:'#0369A1',c2:'#0891B2',c3:'#38BDF8',shape:'shield'},
+    {c1:'#047857',c2:'#059669',c3:'#34D399',shape:'diamond'},
+    {c1:'#B45309',c2:'#D97706',c3:'#FCD34D',shape:'circle'},
+    {c1:'#BE185D',c2:'#DB2777',c3:'#F472B6',shape:'hex'},
+    {c1:'#6D28D9',c2:'#7C3AED',c3:'#A78BFA',shape:'shield'},
+    {c1:'#0F766E',c2:'#0D9488',c3:'#2DD4BF',shape:'diamond'},
+    {c1:'#C2410C',c2:'#EA580C',c3:'#FB923C',shape:'circle'},
+    {c1:'#1D4ED8',c2:'#2563EB',c3:'#60A5FA',shape:'hex'},
+    {c1:'#9333EA',c2:'#A855F7',c3:'#C084FC',shape:'shield'},
+    {c1:'#0E7490',c2:'#0891B2',c3:'#22D3EE',shape:'diamond'},
+    {c1:'#15803D',c2:'#16A34A',c3:'#4ADE80',shape:'circle'}
+];
+
+function getPalette(name) {
+    let h = 0;
+    for (let ch of (name||'X')) h = (h * 31 + ch.charCodeAt(0)) & 0xffff;
+    return LOGO_PALETTES[h % LOGO_PALETTES.length];
+}
+
+function getInitials(name) {
+    const words = (name||'?').trim().split(/\s+/);
+    if (words.length === 1) return words[0].substring(0,2).toUpperCase();
+    return words.slice(0,2).map(w=>w[0].toUpperCase()).join('');
+}
+
+// Generates a unique SVG logo per client — shape + gradient + initials
+function clientLogoSVG(name, size=60) {
+    const p = getPalette(name);
+    const initials = getInitials(name);
+    const id = 'g'+Math.abs(name.split('').reduce((a,c)=>a*31+c.charCodeAt(0),0)|0).toString(36);
+    const fs = initials.length > 2 ? Math.round(size*0.26) : Math.round(size*0.3);
+
+    let shapePath = '';
+    if (p.shape === 'hex') {
+        // Hexagon
+        const r = size*0.46, cx = size/2, cy = size/2;
+        const pts = Array.from({length:6},(_,i)=>{
+            const a = Math.PI/180*(60*i-30);
+            return `${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;
+        }).join(' ');
+        shapePath = `<polygon points="${pts}" fill="url(#${id})" />`;
+    } else if (p.shape === 'shield') {
+        // Shield
+        const s = size, h2 = s*0.5;
+        shapePath = `<path d="M${h2} ${s*0.06} L${s*0.1} ${s*0.24} L${s*0.1} ${s*0.54} C${s*0.1} ${s*0.78} ${h2} ${s*0.94} ${h2} ${s*0.94} C${h2} ${s*0.94} ${s*0.9} ${s*0.78} ${s*0.9} ${s*0.54} L${s*0.9} ${s*0.24} Z" fill="url(#${id})" />`;
+    } else if (p.shape === 'diamond') {
+        // Rounded diamond / rotated square
+        const c = size/2, r = size*0.42;
+        shapePath = `<rect x="${c-r}" y="${c-r}" width="${r*2}" height="${r*2}" rx="${r*0.22}" transform="rotate(45 ${c} ${c})" fill="url(#${id})" />`;
+    } else {
+        // Circle
+        shapePath = `<circle cx="${size/2}" cy="${size/2}" r="${size*0.44}" fill="url(#${id})" />`;
+    }
+
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="${p.c1}"/>
+                <stop offset="100%" stop-color="${p.c2}"/>
+            </linearGradient>
+            <linearGradient id="${id}s" x1="0" y1="0" x2="0.5" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+            <filter id="${id}f" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="${p.c1}" flood-opacity="0.5"/>
+            </filter>
+        </defs>
+        <g filter="url(#${id}f)">${shapePath}</g>
+        <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle"
+            font-family="'Playfair Display',Georgia,serif" font-size="${fs}" font-weight="900"
+            fill="rgba(255,255,255,0.95)" letter-spacing="-0.5">${initials}</text>
+    </svg>`;
+}
+
+function clientLogoHTML(name) {
+    return `<div class="client-logo-wrap">${clientLogoSVG(name, 60)}</div>`;
+}
+
+function adminLogoHTML(name) {
+    return `<div class="admin-logo-sm">${clientLogoSVG(name, 42)}</div>`;
+}
 
 function startFirebaseListener() {
     setFbStatus('connecting');
@@ -389,14 +481,29 @@ function renderPublic() {
         const tags = [];
         if(c.email) tags.push(`<span class="ctag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</span>`);
         if(c.phone) tags.push(`<span class="ctag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${esc(c.phone)}</span>`);
-        return `<div class="client-card" style="animation-delay:${i*0.05}s"><div class="card-logo-row"><div class="card-logo-box">${LOGO_HTML}</div><span class="badge-premium">Premium</span></div><div class="card-name">${esc(c.name)}</div>${date?`<div class="card-since">Client since ${date}</div>`:''}<div class="card-divider"></div>${tags.length?`<div class="card-tags">${tags.join('')}</div>`:''}<div class="card-actions"><button class="btn-login" onclick="goLogin('${escA(c.loginUrl)}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>Client Login</button><button class="btn-contact" onclick="goContact('${esc(c.id)}')" title="Contact"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></button></div></div>`;
+        return `<div class="client-card" style="animation-delay:${i*0.05}s">
+            <div class="card-logo-row">${clientLogoHTML(c.name)}<span class="badge-premium">Premium</span></div>
+            <div class="card-name">${esc(c.name)}</div>
+            ${date?`<div class="card-since">Client since ${date}</div>`:''}
+            <div class="card-divider"></div>
+            ${tags.length?`<div class="card-tags">${tags.join('')}</div>`:'<div class="card-tags"></div>'}
+            <div class="card-actions">
+                <button class="btn-login" onclick="goLogin('${escA(c.loginUrl)}')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    Client Login
+                </button>
+                <button class="btn-contact" onclick="goContact('${esc(c.id)}')" title="Contact">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </button>
+            </div>
+        </div>`;
     }).join('');
 }
 
 function renderAdminList() {
     const body = document.getElementById('adminBody'); if(!body) return;
     if (!clients.length) { body.innerHTML=`<div class="admin-empty"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><p>No clients yet. Click <strong>Add New Client</strong> to start.</p></div>`; return; }
-    body.innerHTML = clients.map(c => `<div class="admin-row"><div class="admin-logo-sm">${LOGO_HTML}</div><div class="admin-row-info"><div class="admin-row-name">${esc(c.name)}</div><div class="admin-row-meta">${c.email?`<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</span>`:''} ${c.phone?`<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${esc(c.phone)}</span>`:''}<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>${esc(c.loginUrl)}</span></div></div><div class="admin-row-actions"><button class="icon-btn" onclick="openEditForm('${esc(c.id)}')" title="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="icon-btn" onclick="window.open('${escA(c.loginUrl)}','_blank')" title="Open"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button><button class="icon-btn del" onclick="deleteClient('${esc(c.id)}')" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></div></div>`).join('');
+    body.innerHTML = clients.map(c => `<div class="admin-row">${adminLogoHTML(c.name)}<div class="admin-row-info"><div class="admin-row-name">${esc(c.name)}</div><div class="admin-row-meta">${c.email?`<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${esc(c.email)}</span>`:''} ${c.phone?`<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${esc(c.phone)}</span>`:''}<span class="admin-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>${esc(c.loginUrl)}</span></div></div><div class="admin-row-actions"><button class="icon-btn" onclick="openEditForm('${esc(c.id)}')" title="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="icon-btn" onclick="window.open('${escA(c.loginUrl)}','_blank')" title="Open"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button><button class="icon-btn del" onclick="deleteClient('${esc(c.id)}')" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button></div></div>`).join('');
 }
 
 function updateCounts() {
